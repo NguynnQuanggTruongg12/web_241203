@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Robot Control</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="Banner0-Photoroom.png" alt="Robot Logo" class="header-image">
+        </div>
+        <div class="menu-buttons">
+            <button id="controlButton" onclick="showControl()">Control</button>
+            <button id="controlCamera" onclick="showCamera()">Camera</button>
+            <button id="controlRobot" onclick="showRobot()">Robot</button>
+        </div>
+        <!-- <div class="header">
+            <img src="Banner0-Photoroom.png" alt="Robot Logo" class="header-image">
+        </div> -->
+        <!-- <div class="top-left-controls">
+            <div class="enable-switch">
+                <label>STATUS:</label>
+                <button id="enableButton" onclick="toggleEnable()">OFF</button>
+            </div>
+        </div> -->
+
+        <!-- Control Panel -->
+        <div class="control-panel">
+            <h2>Control Panel</h2>
+            <div class="top-left-controls">
+                <div class="enable-switch">
+                    <label>STATUS:</label>
+                    <button id="enableButton" onclick="toggleEnable()">OFF</button>
+                </div>
+            </div>
+            <div class="control-row">
+                <button class="control-button" id="up">↑</button>
+            </div>
+            <div class="control-row">
+                <button class="control-button" id="left">←</button>
+                <button class="control-button" id="stop">⦿</button>
+                <button class="control-button" id="right">→</button>
+            </div>
+            <div class="control-row">
+                <button class="control-button" id="down">↓</button>
+            </div>
+                    <!-- Speed Sliders -->
+            <div class="sliders">
+                <div class="slider">
+                    <label>Straight Speed: <span id="straightSpeed">0</span></label>
+                    <input type="range" min="0" max="1" value="0" step="0.1" id="straightSpeedSlider" oninput="updateStraightSpeed()">
+                </div>
+                <div class="slider">
+                    <label>Rotation Speed: <span id="rotationSpeed">0</span></label>
+                    <input type="range" min="0" max="1" value="0" step="0.1" id="rotationSpeedSlider" oninput="updateRotationSpeed()">
+                </div>
+            </div>
+        </div>
+
+        <!-- Speed Sliders -->
+        <!-- <div class="sliders">
+            <div class="slider">
+                <label>Straight Speed: <span id="straightSpeed">0</span></label>
+                <input type="range" min="0" max="1" value="0" step="0.1" id="straightSpeedSlider" oninput="updateStraightSpeed()">
+            </div>
+            <div class="slider">
+                <label>Rotation Speed: <span id="rotationSpeed">0</span></label>
+                <input type="range" min="0" max="1" value="0" step="0.1" id="rotationSpeedSlider" oninput="updateRotationSpeed()">
+            </div>
+        </div> -->
+
+        <!-- Camera Panel -->
+        <div class="camera-panel">
+            <h2>Camera Frame</h2>
+            <!-- <div class="camera-frame"> -->
+                <!-- <img id="videoImage" src="http://127.0.0.1:5000/video" width="100%" height="100%" frameborder="0" alt="Robot-CAM">                                   
+            </div> -->
+            <!-- <div class="camera-frame"> -->
+                <!-- <?php -->
+                <!-- // Đọc nội dung từ link_ngrok.txt -->
+                <!-- $file_path = 'link_ngrok.txt'; -->
+                <!-- $file_contents = file_get_contents($file_path); -->
+                <!-- preg_match('https?:\/\/[^s"]+/', $file_contents,$matches ); -->
+                <!-- %link_url = isset($match[0] ? %matches[0]) : ''; -->
+                <!-- echo '<iframe src="' . htmlspecialchars($link_url) . '"></iframe>'; -->
+                <!-- ?> -->
+            <!-- </div> -->
+            <div class="camera-frame">
+                <?php
+                $file_path = 'link_ngrok.txt';
+                if (file_exists($file_path)) {
+                    $file_contents = file_get_contents($file_path);
+                    preg_match('/https?:\/\/[^\s"]+/', $file_contents, $matches);
+                    echo isset($matches[0]) 
+                        ? '<iframe src="' . htmlspecialchars($matches[0]) . '" width="100%" height="100%" frameborder="0" allowfullscreen></iframe>'
+                        : '<p>Không tìm thấy URL hợp lệ trong tệp.</p>';
+                } else {
+                    echo '<p>Tệp <strong>link_ngrok.txt</strong> không tồn tại.</p>';
+                }
+                ?>
+            </div>
+            
+            <div class="control-row">
+                <button class="control-button-cam" id="up_cam">↑</button>
+            </div>
+            <div class="control-row">
+                <button class="control-button-cam" id="left_cam">←</button>
+                <button class="control-button-cam" id="home_cam">home</button>
+                <button class="control-button-cam" id="right_cam">→</button>
+            </div>
+            <div class="control-row">
+                <button class="control-button-cam" id="down_cam">↓</button>
+            </div>
+        </div>
+        <div class = "robot-panel">
+            <h2> Robot Panel </h2>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+    <script src="script.js"></script>
+    <script>
+        function showControl() {
+            // id="up_cam"
+            document.querySelector('.control-panel').style.display = 'block';
+            document.querySelector('.camera-panel').style.display = 'none';
+            document.querySelector('.robot-panel').style.display = 'none';
+        }
+        function showCamera() {
+            document.querySelector('.control-panel').style.display = 'none';
+            document.querySelector('.camera-panel').style.display = 'block';
+            document.querySelector('.robot-panel').style.display = 'none';
+        }
+        function showRobot() {
+            document.querySelector('.control-panel').style.display = 'none';
+            document.querySelector('.camera-panel').style.display = 'none';
+            document.querySelector('.robot-panel').style.display = 'block';
+        }
+        // Hiển thị giao diện mặc định
+        showControl();
+    </script>
+</body>
+</html>
